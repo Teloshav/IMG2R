@@ -7,6 +7,36 @@ struct CrawlChunk {
     
 }
 
+impl CrawlChunk {
+    // this method prints out all the details of the pixels in a chunk automatically
+    // I would try to make the CrawlChunk struct iterable or whatever but that's too complicated for me... I only started learning this very recently. ;-;
+    fn test(&self) {
+        println!("Chunk start pixel: {:?}\n",&self.start_pixel);
+        for row1 in 0..2 {
+            for row2 in 0..2 {
+                for rgba in 0..4 {
+                    if rgba == 0 {
+                        println!("Pixel r: {:?}",&self.pixels[row1][row2].r);
+
+                    } else if rgba == 1 {
+                        println!("Pixel g: {:?}",&self.pixels[row1][row2].g);
+                            
+                    } else if rgba == 2 {
+                        println!("Pixel b: {:?}",&self.pixels[row1][row2].b);
+                            
+                    } else if rgba == 3 {
+                        println!("Pixel a: {:?}\n\n",&self.pixels[row1][row2].a);
+                            
+                    } 
+                    
+                }
+            }
+            
+        }
+    }
+    
+}
+
 struct RgbaPixel {
     // this is a struct for storing the rgba values
     r: u8,
@@ -32,18 +62,18 @@ fn chunk(x: u32, y: u32, img: image::DynamicImage) -> CrawlChunk{
         pixels: [
             [
                 RgbaPixel {
-                    r: img.get_pixel(x,y)[0], g: img.get_pixel(x,y)[1], b: img.get_pixel(x,y)[2], a:img.get_pixel(x,y)[3]
+                    r: img.get_pixel(y,x)[0], g: img.get_pixel(y,x)[1], b: img.get_pixel(y,x)[2], a:img.get_pixel(y,x)[3]
                 },
                 RgbaPixel {
-                    r: img.get_pixel(x+1,y)[0], g: img.get_pixel(x+1,y)[1], b: img.get_pixel(x+1,y)[2], a:img.get_pixel(x+1,y)[3]
+                    r: img.get_pixel(y+1,x)[0], g: img.get_pixel(y+1,x)[1], b: img.get_pixel(y+1,x)[2], a:img.get_pixel(y+1,x)[3]
                 }
             ],
             [
                 RgbaPixel {
-                r: img.get_pixel(x,y+1)[0], g: img.get_pixel(x,y+1)[1], b: img.get_pixel(x,y+1)[2], a:img.get_pixel(x,y+1)[3]
+                r: img.get_pixel(y,x+1)[0], g: img.get_pixel(y,x+1)[1], b: img.get_pixel(y,x+1)[2], a:img.get_pixel(y,x+1)[3]
                 },
                 RgbaPixel {
-                    r: img.get_pixel(x+1,y+1)[0], g: img.get_pixel(x+1,y+1)[1], b: img.get_pixel(x+1,y+1)[2], a:img.get_pixel(x+1,y+1)[3]
+                    r: img.get_pixel(y+1,x+1)[0], g: img.get_pixel(y+1,x+1)[1], b: img.get_pixel(y+1,x+1)[2], a:img.get_pixel(y+1,x+1)[3]
                 }
             ]
         ]
@@ -52,35 +82,11 @@ fn chunk(x: u32, y: u32, img: image::DynamicImage) -> CrawlChunk{
 
 fn main() {
     let (image, width, height) = get_image("testImage.png",1);
-    println!("x: {:?}\ny: {}\nz: {}", image, width, height);
     
     for x in (0..width).step_by(2) {
         for y in (0..height).step_by(2) {
             let chunk: CrawlChunk = chunk(x, y, image.clone());
-            
-            println!("Chunk start pixel: {:?}\n",&chunk.start_pixel);
-            // for row1 in 0..2 {
-            //     for row2 in 0..2 {
-            //         for rgba in 0..4 {
-            //             if rgba == 0 {
-            //                 println!("Pixel r: {:?}",chunk.pixels[row1][row2].r);
-
-            //             } else if rgba == 1 {
-            //                 println!("Pixel g: {:?}",chunk.pixels[row1][row2].g);
-                                
-            //             } else if rgba == 2 {
-            //                 println!("Pixel b: {:?}",chunk.pixels[row1][row2].b);
-                                
-            //             } else if rgba == 3 {
-            //                 println!("Pixel a: {:?}\n\n",chunk.pixels[row1][row2].a);
-                                
-            //             } 
-                        
-            //         }
-            //     }
-                
-            // }
-
+            chunk.test();
         }
         
     }
